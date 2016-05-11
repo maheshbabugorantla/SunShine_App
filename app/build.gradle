@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('F:/New_Volume_E/Android/Key_Store_for_Apps/SunShine_App_KeyStore.jks')
+            keyAlias 'sunshine_app_keystore'
+            keyPassword '!VerilogHD1080p'
+            storePassword '!VerilogHD1080p'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.example.mahes_000.sunshine_app"
         minSdkVersion 21
@@ -11,11 +18,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+
     }
 }
 
