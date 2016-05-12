@@ -98,11 +98,6 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
             getForecast(Zipcode);
         }
 
-        else if (id == R.id.action_settings)
-        {
-            return true;
-        }
-
         else if (id == R.id.download_data)
         {
             return true;
