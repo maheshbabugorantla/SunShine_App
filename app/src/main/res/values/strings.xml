@@ -6,4 +6,8 @@
     <string name="action_download" translatable="false">Download</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="pref_location_key">Location</string>
+    <string name="pref_location_label">Location</string>
+    <string name="pref_location_default">47906</string>
+
 </resources>
