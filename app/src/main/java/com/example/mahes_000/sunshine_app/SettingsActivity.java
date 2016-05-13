@@ -21,8 +21,8 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         super.onCreate(savedInstanceState);
 
         // Here we add the general preferences created using the XML File
-        getFragmentManager().beginTransaction().replace(R.id.container, new MyPreferenceFragment()).commit();
-        //addPreferencesFromResource(R.xml.settings_preferences);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment
