@@ -51,11 +51,10 @@ public class MainActivityFragment extends Fragment
 
     String[] forecastArray = {"Today-Sunny-88/63", "Tomorrow-Foggy-70/46", "Weds-Cloudy-77/63", "Thurs-Rainy-45/66", "Fri-Foggy-70/46", "Sat-Sunny-76/68"};
 
-    boolean refresh = false;
     String[] forecastedWeather = null;
     ArrayAdapter<String> stringArrayAdapter;
     ConnectivityManager connectivityManager; // Used to manage the Active Data Network Connections
-    String Zipcode = "47906";
+    String Zipcode = "";
 
     public MainActivityFragment()
     {
@@ -67,19 +66,17 @@ public class MainActivityFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        if(refresh)
-        {
-            forecastArray = forecastedWeather;
-        }
-
         setHasOptionsMenu(true);
     }
 
     @Override
-    public void onPause() {
+    public void onStart()
+    {
         super.onStart();
 
-        refresh = true;
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Zipcode = preference.getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
+        getForecast(Zipcode);
     }
 
     // This is used to create the Options in the Menu Bar such as Settings, Refresh_Data, etc
@@ -116,11 +113,6 @@ public class MainActivityFragment extends Fragment
     {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        if(refresh)
-        {
-            forecastArray = forecastedWeather;
-        }
 
         List<String> forecastData = new ArrayList<>(Arrays.asList(forecastArray));
 
@@ -163,8 +155,6 @@ public class MainActivityFragment extends Fragment
                 try
                 {
                     downloadTask.execute(ZipCode).get();
-
-                    refresh = true; // This gives status that the Data has already been refreshed
                 }
 
                 catch (InterruptedException e)
