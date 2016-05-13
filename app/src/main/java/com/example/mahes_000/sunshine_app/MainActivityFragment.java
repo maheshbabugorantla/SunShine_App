@@ -3,11 +3,14 @@ package com.example.mahes_000.sunshine_app;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +44,7 @@ import org.json.*;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener
+public class MainActivityFragment extends Fragment
 {
 
     //MenuItem menuItem;
@@ -95,6 +98,8 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
 
         if (id == R.id.action_refresh)
         {
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            Zipcode = preference.getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
             getForecast(Zipcode);
         }
 
@@ -123,24 +128,6 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
 
         RelativeLayout Container = (RelativeLayout) rootView.findViewById(R.id.Relative_Layout);
 
-        // Application Crashes here
-        // Adding the Spinner here
-//        Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner);
-//
-//        String[] Cities = new String[]{"NY","IN"};
-//
-//        List<String> arrayList = new ArrayList<>();
-//
-////        for(String str: Cities)
-////        {
-////            arrayList.add(str);
-////        }
-//        Collections.addAll(arrayList,Cities);
-//
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item,R.id.spinner,arrayList);
-//
-//        spinner.setAdapter(arrayAdapter);
-
         // This is used for list the weather for a week
         final ListView listView = (ListView) Container.findViewById(R.id.listview_forcast);
 
@@ -154,32 +141,12 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
                 Intent toDetailActivity = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
 
                 startActivity(toDetailActivity);
-
-                //Toast.makeText(getActivity(),"An Item with ID " + forecast +" on ListView is clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
         getForecast(Zipcode);
 
         return(rootView);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
-        String city = parent.getSelectedItem().toString();
-
-        if(city.equals("White Plains, NY"))
-        {
-            Zipcode = "10601";
-        }
-
-        else if(city.equals("Lafayette, IN"))
-        {
-            Zipcode = "47906";
-        }
-
-        getForecast(Zipcode);
     }
 
     private boolean getForecast(String ZipCode)
@@ -195,8 +162,6 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
 
                 try
                 {
-//                http://api.openweathermap.org/data/2.5/forecast/city?q=Hyderabad,in&APPID=486563a380c9eb938fdb890668697f20&mode=json
-
                     downloadTask.execute(ZipCode).get();
 
                     refresh = true; // This gives status that the Data has already been refreshed
