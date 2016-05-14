@@ -2,7 +2,6 @@ package com.example.mahes_000.sunshine_app;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -10,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
