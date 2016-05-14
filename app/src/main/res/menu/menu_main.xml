@@ -4,6 +4,11 @@
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:orderInCategory="3"
-        android:showAsAction="never" />
+        android:orderInCategory="3" />
+
+    <!--<item-->
+        <!--android:id="@+id/show_location"-->
+        <!--android:title="@string/action_show_location"-->
+        <!--android:orderInCategory="2" />-->
+
 </menu>

@@ -2,6 +2,7 @@ package com.example.mahes_000.sunshine_app;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -83,8 +84,8 @@ public class MainActivityFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        inflater.inflate(R.menu.forecastfragment,menu);
-        inflater.inflate(R.menu.download_data, menu);
+        inflater.inflate(R.menu.forecastfragment, menu); // Adding the Refresh Option to Menu
+        inflater.inflate(R.menu.get_location,menu); // Adding Show Map Location Option to the Menu
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -100,12 +101,35 @@ public class MainActivityFragment extends Fragment
             getForecast(Zipcode);
         }
 
-        else if (id == R.id.download_data)
+        else if (id == R.id.show_location)
         {
+            openPreferredLocationInMap();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // This function is used to show the Location of the ZipCode entered in the Settings on the World Map.
+    // This function makes use of the apps that are already installed on the phone to show the ZipCode Location on the world map
+    private void openPreferredLocationInMap()
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        // This is used to get the User set location
+        String Location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        // This Uri is used to make a query to the apps that provide access to maps on the phone using the location information obtained from 'Location' variable
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q",Location).build();
+        intent.setData(geoLocation);
+
+        // This starts the activity only when there is an app to show the GeoLocation on the Maps. for E.g Google Maps.
+        if(intent.resolveActivity(getActivity().getPackageManager()) != null)
+        {
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -320,7 +344,18 @@ public class MainActivityFragment extends Fragment
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
-        String highLowStr = roundedHigh + "/" + roundedLow;
+        String Units;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Units = preferences.getString(getString(R.string.pref_temperature_key),getString(R.string.pref_temperature_default));
+
+        if(Units.equals("Fahrenheit"))
+        {
+            roundedHigh = Math.round(roundedHigh * 1.8 + 32);
+            roundedLow = Math.round(roundedLow * 1.8 + 32);
+        }
+
+        String highLowStr = roundedHigh + "/" + roundedLow; // Here the values of Temperature are by default in Celsius
 
         return(highLowStr);
     }

@@ -1,13 +1,31 @@
 <resources>
+
+     <!-- Name of the App -->
     <string name="app_name">SunShine</string>
+
+    <!-- Strings for TextView -->
     <string name="hello_world">Hello world!</string>
+
+    <!-- Menu Options-->
     <string name="action_settings">Settings</string>
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="action_download" translatable="false">Download</string>
+    <string name="action_show_location" translatable="false">Show Location</string>
+
+    <!-- Names of Activities -->
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- App Preferences -->
+
+    <!-- Values to Zip Code -->
     <string name="pref_location_key">Location</string>
     <string name="pref_location_label">Location</string>
     <string name="pref_location_default">47906</string>
+
+    <!-- Values to change the Temperature Units -->
+    <string name="pref_temperature_key">Temperature Units</string>
+    <string name="pref_temperature_title">Temperature Units</string>
+    <string name="pref_temperature_default">Celsius</string>
 
 </resources>

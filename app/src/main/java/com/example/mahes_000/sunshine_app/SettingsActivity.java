@@ -31,8 +31,10 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.settings_preferences);
             new SettingsActivity().bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+            new SettingsActivity().bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_temperature_key)));
         }
     }
 
