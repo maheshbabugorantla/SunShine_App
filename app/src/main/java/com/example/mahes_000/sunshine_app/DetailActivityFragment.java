@@ -17,7 +17,8 @@ public class DetailActivityFragment extends Fragment
 {
 
     private static final String FORECAST_SHARE_HASHTAG = "#SunshineApp";
-    public String mForecastStr;
+    public static String mForecastStr;
+
     public DetailActivityFragment()
     {
         setHasOptionsMenu(true);
@@ -31,7 +32,8 @@ public class DetailActivityFragment extends Fragment
 
         Intent intent = getActivity().getIntent();
 
-        if ((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT)) {
+        if ((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT))
+        {
             mForecastStr = new String(intent.getStringExtra(Intent.EXTRA_TEXT));
             //intent.getStringExtra(Intent.EXTRA_TEXT);
             Log.i("Forecast ", mForecastStr);

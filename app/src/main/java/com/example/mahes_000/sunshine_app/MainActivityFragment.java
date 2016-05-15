@@ -23,7 +23,6 @@ import android.widget.ArrayAdapter;
 
 import android.widget.RelativeLayout;
 import android.widget.ListView;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
