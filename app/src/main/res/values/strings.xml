@@ -11,6 +11,7 @@
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="action_download" translatable="false">Download</string>
     <string name="action_show_location" translatable="false">Show Location</string>
+    <string name="action_share_weather" translatable="false">Share</string>
 
     <!-- Names of Activities -->
     <string name="title_activity_detail">DetailActivity</string>

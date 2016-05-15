@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 
 import android.widget.RelativeLayout;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -53,6 +54,7 @@ public class MainActivityFragment extends Fragment
     String[] forecastedWeather = null;
     ArrayAdapter<String> stringArrayAdapter;
     ConnectivityManager connectivityManager; // Used to manage the Active Data Network Connections
+//    private ShareActionProvider mShareActionProvider;
     String Zipcode = "";
 
     public MainActivityFragment()
@@ -84,6 +86,7 @@ public class MainActivityFragment extends Fragment
     {
         inflater.inflate(R.menu.forecastfragment, menu); // Adding the Refresh Option to Menu
         inflater.inflate(R.menu.get_location,menu); // Adding Show Map Location Option to the Menu
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -107,6 +110,16 @@ public class MainActivityFragment extends Fragment
 
         return super.onOptionsItemSelected(item);
     }
+
+//    // Call to update the share intent
+//    private void setShareIntent(Intent shareIntent)
+//    {
+//        if(mShareActionProvider != null)
+//        {
+//            mShareActionProvider.setShareIntent(shareIntent);
+//        }
+//    }
+
 
     // This function is used to show the Location of the ZipCode entered in the Settings on the World Map.
     // This function makes use of the apps that are already installed on the phone to show the ZipCode Location on the world map

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <!-- This menu option is used to the share the data in the weather app. -->
+    <item
+        android:id="@+id/share_weather"
+        android:title="@string/action_share_weather"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        android:orderInCategory="1"/>
+
+</menu>
