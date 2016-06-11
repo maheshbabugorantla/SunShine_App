@@ -60,7 +60,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         if(preference instanceof ListPreference)
         {
             // For list preferences, look up the correct display value in the preference's entries list (since they have separate labels/values).
-
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(stringValue);
 

@@ -52,7 +52,7 @@ public class MainActivityFragment extends Fragment
 
     String[] forecastedWeather = null;
     ArrayAdapter<String> stringArrayAdapter;
-    ConnectivityManager connectivityManager; // Used to manage the Active Data Network Connections
+
 //    private ShareActionProvider mShareActionProvider;
     String Zipcode = "";
 
@@ -179,7 +179,9 @@ public class MainActivityFragment extends Fragment
     {
         try
         {
-            connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            // Used to manage the Active Data Network Connections
+            ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo != null)
