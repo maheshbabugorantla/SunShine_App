@@ -1,13 +1,11 @@
 package com.example.mahes_000.sunshine_app;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * Created by mahes_000 on 5/12/2016.

@@ -1,6 +1,6 @@
 package com.example.mahes_000.sunshine_app;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -109,16 +109,6 @@ public class MainActivityFragment extends Fragment
 
         return super.onOptionsItemSelected(item);
     }
-
-//    // Call to update the share intent
-//    private void setShareIntent(Intent shareIntent)
-//    {
-//        if(mShareActionProvider != null)
-//        {
-//            mShareActionProvider.setShareIntent(shareIntent);
-//        }
-//    }
-
 
     // This function is used to show the Location of the ZipCode entered in the Settings on the World Map.
     // This function makes use of the apps that are already installed on the phone to show the ZipCode Location on the world map

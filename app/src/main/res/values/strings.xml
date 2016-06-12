@@ -29,5 +29,8 @@
     <string name="pref_temperature_title">Temperature Units</string>
     <string name="pref_temperature_default">Celsius</string>
     <string name="pref_units_imperial">Fahrenheit</string>
+    
+    <!-- API KEY -->
+    <string name="OpenWeatherMapAPIKey"></string>
 
 </resources>

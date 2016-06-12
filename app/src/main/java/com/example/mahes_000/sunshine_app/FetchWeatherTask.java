@@ -270,7 +270,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
 
         String format = "json";
         String units = "metric";
-        int numDays = 14;
+        String API_Key = "486563a380c9eb938fdb890668697f20";
+        String numDays = "14";
 
         try {
             // Construct the URL for the OpenWeatherMap query
@@ -284,13 +285,9 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
             final String DAYS_PARAM = "cnt";
             final String APPID_PARAM = "APPID";
 
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params[0])
-                    .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(UNITS_PARAM, units)
-                    .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-                    .appendQueryParameter(APPID_PARAM,BuildConfig.OPEN_WEATHER_MAP_API_KEY)
-                    .build();
+            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon().appendQueryParameter(QUERY_PARAM, params[0] + ",US").appendQueryParameter(APPID_PARAM,API_Key).appendQueryParameter(FORMAT_PARAM, format).appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(DAYS_PARAM,numDays).build();
+
+            Log.d("Weather URL Sunshine",builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -321,6 +318,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
                 return null;
             }
             forecastJsonStr = buffer.toString();
+            Log.d("Forecast Sunshine", forecastJsonStr);
             getWeatherDataFromJson(forecastJsonStr,locationQuery);
         }
         catch (IOException e)
