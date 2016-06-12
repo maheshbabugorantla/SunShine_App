@@ -2,22 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="14dp"
-    android:paddingRight="14dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:background="@android:color/holo_blue_dark"
     tools:context=".MainActivity$PlaceholderFragment"
     android:id="@+id/Relative_Layout"
     android:weightSum="1">
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/white"
         android:id="@+id/listview_forcast"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

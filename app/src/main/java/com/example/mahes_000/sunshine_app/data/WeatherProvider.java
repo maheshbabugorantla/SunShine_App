@@ -375,6 +375,9 @@ public class WeatherProvider extends ContentProvider
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
+
+                    System.out.println("Entered the bulkInsert Function ");
+
                     for (ContentValues value : values) {
                         normalizeDate(value);
                         long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
