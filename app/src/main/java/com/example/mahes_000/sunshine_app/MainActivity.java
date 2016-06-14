@@ -8,16 +8,23 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
 {
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+
+//    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+
+    public String mLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if(savedInstanceState == null)
-//        {
-//            getSupportFragmentManager().beginTransaction().add(R.id.Relative_Layout, new MainActivityFragment()).commit();
-//        }
+/*        if(savedInstanceState == null)
+        {
+            getSupportFragmentManager().beginTransaction().add(R.id.container,new ForecastFragment(), FORECASTFRAGMENT_TAG).commit();
+        }*/
     }
 
     @Override
@@ -42,5 +49,6 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

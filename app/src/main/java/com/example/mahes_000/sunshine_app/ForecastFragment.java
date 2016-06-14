@@ -34,6 +34,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private static final int FORECAST_LOADER = 0; // Loader ID
 
+    //private String FORECASTFRAGMENT_TAG = "FFTAG";
+
     private static final String[] FORECAST_COLUMNS =
             {
 
@@ -145,19 +147,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // Get a reference to the ListView, and attach this adapter to it.
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_forcast);
         listView.setAdapter(mForecastAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                    Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                    if(cursor != null)
-                    {
-                        String locationSetting = Utility.getPreferredLocation(getActivity());
-                        Intent toDetailActivity = new Intent(getActivity(), DetailActivity.class).setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
-                        startActivity(toDetailActivity);
-                    }
+                if (cursor != null) {
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    Intent toDetailActivity = new Intent(getActivity(), DetailActivity.class).setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+                    startActivity(toDetailActivity);
+                }
             }
         });
 
@@ -172,7 +171,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().initLoader(FORECAST_LOADER, null, this);
     }
 
-    private void updateWeather()
+    public void updateWeather()
     {
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
@@ -180,9 +179,24 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
-        updateWeather();
+
+        String location = Utility.getPreferredLocation(getActivity()); // New Location.
+
+        if(location != null && !location.equals(new MainActivity().mLocation))
+        {
+           // ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            onLocationChanged();
+            new MainActivity().mLocation = location;
+        }
+    }
+
+    private void onLocationChanged()
+    {
+        updateWeather(); // Updating the Weather
+        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 
     private void openPreferredMapLocation()
