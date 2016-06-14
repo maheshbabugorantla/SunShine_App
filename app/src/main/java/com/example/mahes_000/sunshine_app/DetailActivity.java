@@ -9,23 +9,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.ShareActionProvider;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity
+{
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     ShareActionProvider mShareActionProvider;
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        if (savedInstanceState == null)
-        {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailActivityFragment())
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction().add(R.id.container,new DetailActivityFragment()).commit();
     }
 
     @Override
@@ -45,8 +40,7 @@ public class DetailActivity extends AppCompatActivity {
         // like when the user selects a new piece of data they might like to share.
         if(mShareActionProvider != null)
         {
-            DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
-            mShareActionProvider.setShareIntent(detailActivityFragment.createShareForecastIntent());
+            mShareActionProvider.setShareIntent(new DetailActivityFragment().createShareForecastIntent());
         }
 
         else

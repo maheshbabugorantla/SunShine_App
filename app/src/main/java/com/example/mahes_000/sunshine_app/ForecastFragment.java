@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -107,7 +108,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         inflater.inflate(R.menu.forecastfragment, menu);
-        inflater.inflate(R.menu.get_location,menu);
+        inflater.inflate(R.menu.get_location, menu);
     }
 
     @Override
@@ -149,12 +150,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
+                    Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                String forecast = listView.getItemAtPosition(position).toString();
-
-                Intent toDetailActivity = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
-
-                startActivity(toDetailActivity);
+                    if(cursor != null)
+                    {
+                        String locationSetting = Utility.getPreferredLocation(getActivity());
+                        Intent toDetailActivity = new Intent(getActivity(), DetailActivity.class).setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+                        startActivity(toDetailActivity);
+                    }
             }
         });
 

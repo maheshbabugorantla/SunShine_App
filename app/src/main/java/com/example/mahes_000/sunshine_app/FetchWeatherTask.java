@@ -306,7 +306,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
@@ -323,7 +324,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
         }
         catch (IOException e)
         {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, "Error " + e);
+            e.printStackTrace();
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
         }
