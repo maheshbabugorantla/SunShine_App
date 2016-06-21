@@ -1,7 +1,5 @@
 package com.example.mahes_000.sunshine_app;
 
-
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mahes_000.sunshine_app.data.WeatherContract;
@@ -37,6 +36,11 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
             WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
+            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
+            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
+            WeatherContract.WeatherEntry.COLUMN_DEGREES,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID
     };
 
     private static final int COL_WEATHER_ID = 0;
@@ -44,7 +48,11 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private static final int COL_WEATHER_DESC = 2;
     private static final int COL_WEATHER_MAX_TEMP = 3;
     private static final int COL_WEATHER_MIN_TEMP = 4;
-
+    private static final int COL_WEATHER_HUMIDITY = 5;
+    private static final int COL_WEATHER_WINDSPEED = 6;
+    private static final int COL_WEATHER_PRESSURE = 7;
+    private static final int COL_WEATHER_DEGREES = 8;
+    private static final int COL_WEATHER_ICON = 9;
 
     public DetailActivityFragment()
     {
@@ -55,19 +63,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-        // The Detail Activity called via intent. Inspect the intent for forecast data
-    /*    Intent intent = getActivity().getIntent();
-
-        if(intent != null)
-        {
-            mForecastStr = intent.getDataString();
-        }
-
-        if(mForecastStr != null)
-        {
-            ((TextView) rootView.findViewById(R.id.text_detail)).setText(mForecastStr);
-        }*/
 
         return(rootView);
     }
@@ -96,8 +91,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         // Now create and return a CursorLoader that will take care of
         // Creating a Cursor for the data being displayed.
-
-        Log.e(LOG_TAG,intent.getData().toString());
+        Log.e(LOG_TAG, intent.getData().toString());
 
         return new CursorLoader(getActivity(),intent.getData(),FORECAST_COLUMNS,null,null,null);
     }
@@ -113,19 +107,86 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             return;
         }
 
-        String dateString = Utility.formatDate(data.getLong(COL_WEATHER_DATE));
+        // For more Details on the default units refer to
+        // http://openweathermap.org/current and check for "Weather parameters in API respond" heading on the WebPage
+
+//        String dateString = Utility.formatDate(data.getLong(COL_WEATHER_DATE));
+        String dateString = Utility.getFriendlyDayString(getActivity(),data.getLong(COL_WEATHER_DATE));
         String weatherDescription = data.getString(COL_WEATHER_DESC);
 
         boolean isMetric = Utility.isMetric(getActivity());
 
-        String maximumTemperature = Utility.formatTemperature(data.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
-        String minimumTemperature = Utility.formatTemperature(data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+        String maximumTemperature = Utility.formatTemperature(getActivity(), data.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
+        String minimumTemperature = Utility.formatTemperature(getActivity(), data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+
+        String atmos_pressure = Double.toString(data.getDouble(COL_WEATHER_PRESSURE));
+        String atmos_humidity = Double.toString(data.getDouble(COL_WEATHER_HUMIDITY));
+        double wind_speed = data.getDouble(COL_WEATHER_WINDSPEED);
+        double wind_direction = data.getDouble(COL_WEATHER_DEGREES);
 
         mForecastStr = String.format("%s - %s - %s / %s", dateString, weatherDescription, maximumTemperature, minimumTemperature);
         Log.i(LOG_TAG, mForecastStr);
 
-        TextView detailView = (TextView) getView().findViewById(R.id.text_detail);
-        detailView.setText(mForecastStr);
+        // Setting the Date
+        TextView dateView = (TextView) getView().findViewById(R.id.column_date_textView);
+        dateView.setText(dateString);
+
+        // Setting the Weather Description
+        TextView weather_desc_View = (TextView) getView().findViewById(R.id.weather_desc_textView);
+        weather_desc_View.setText(weatherDescription);
+
+        // Setting the Maximum Temperature
+        TextView weather_max_temp = (TextView) getView().findViewById(R.id.column_max_temp_textView);
+        weather_max_temp.setText(maximumTemperature);
+
+        // Setting the Minimum Temperature
+        TextView weather_min_temp = (TextView) getView().findViewById(R.id.column_min_temp_textView);
+        weather_min_temp.setText(minimumTemperature);
+
+        // Setting the Image Source based on the weather
+        ImageView weather_icon = (ImageView) getView().findViewById(R.id.weather_icon);
+        weather_icon.setImageResource(Utility.getArtResourceforWeatherCondition(data.getInt(COL_WEATHER_ICON)));
+
+        // Atmospheric Pressure default units are in hPa
+        TextView weather_Pressure = (TextView) getView().findViewById(R.id.pressure_textView);
+        weather_Pressure.setText(atmos_pressure + " hPa");
+
+        // Atmospheric Humidity. Default Units: in Percentage (%)
+        TextView weather_Humidity = (TextView) getView().findViewById(R.id.humidity_textView);
+        weather_Humidity.setText(atmos_humidity + " %");
+
+        // Wind Speed and Direction. Default Units: Speed => meters/second && Direction => Degrees
+        TextView weather_Wind = (TextView) getView().findViewById(R.id.wind_textView);
+        wind_speed = wind_speed * 3.6; // Converting to km/h (kmph)
+
+        String direction = "NE";
+
+        if((wind_direction >= 0)  && (wind_direction <= 90))
+        {
+            direction = "NE";
+        }
+
+        else if((wind_direction <= 180)  && (wind_direction > 90))
+        {
+            direction = "NW";
+        }
+
+        else if((wind_direction <= 270) && (wind_direction > 180))
+        {
+            direction = "SW";
+        }
+
+        else if((wind_direction <= 360) && (wind_direction > 270))
+        {
+            direction = "SE";
+        }
+
+        weather_Wind.setText(String.format("%.2f", wind_speed) + " Km/h " + direction);
+//        weather_Wind.setText(Double.toString(wind_speed) + " Km/h " + direction);
+
+        Log.i(LOG_TAG, "Pressure: " + atmos_pressure);
+        Log.i(LOG_TAG, "Humidity: " + atmos_humidity);
+        Log.i(LOG_TAG, "Wind: " + wind_speed + " Wind Direction: " + wind_direction);
 
         if(new DetailActivity().mShareActionProvider != null)
         {
@@ -142,7 +203,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        getLoaderManager().initLoader(DETAIL_LOADER,null,this);
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
 
         super.onActivityCreated(savedInstanceState);
     }

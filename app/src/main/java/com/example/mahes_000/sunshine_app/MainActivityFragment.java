@@ -48,7 +48,7 @@ public class MainActivityFragment extends Fragment
 
     //MenuItem menuItem;
 
-    String[] forecastArray = {"Today-Sunny-88/63", "Tomorrow-Foggy-70/46", "Weds-Cloudy-77/63", "Thurs-Rainy-45/66", "Fri-Foggy-70/46", "Sat-Sunny-76/68"};
+    String[] forecastArray = {"Today-Sunny-88/63", "Tomorrow-Foggy-70/46", "Weds-cloudy-77/63", "Thurs-Rainy-45/66", "Fri-Foggy-70/46", "Sat-Sunny-76/68"};
 
     String[] forecastedWeather = null;
     ArrayAdapter<String> stringArrayAdapter;

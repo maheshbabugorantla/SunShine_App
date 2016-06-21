@@ -15,7 +15,9 @@
 
         <provider
             android:authorities="com.example.mahesh_000.sunshine_app"
-            android:name=".data.WeatherProvider" />
+            android:name=".data.WeatherProvider"
+            android:enabled="true"
+            android:exported="true"/>
 
         <activity
             android:name=".MainActivity"
