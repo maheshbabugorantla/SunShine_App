@@ -20,7 +20,7 @@ public class DetailActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        getSupportFragmentManager().beginTransaction().add(R.id.container,new DetailActivityFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.weather_detail_container,new DetailActivityFragment()).commit();
     }
 
     @Override
