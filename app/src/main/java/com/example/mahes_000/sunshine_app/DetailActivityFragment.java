@@ -2,6 +2,7 @@ package com.example.mahes_000.sunshine_app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -26,9 +27,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private static final String FORECAST_SHARE_HASHTAG = "#SunshineApp";
     public static String mForecastStr;
 
+    private Uri mUri = null;
+
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
     private static final int DETAIL_LOADER = 0; // This is used to link the Cursor Loader
+
+    static final String DETAIL_URI = "URI";
 
     private static final String[] FORECAST_COLUMNS = {
             WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
@@ -64,6 +69,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        Bundle arguments = getArguments();
+
+        if(arguments != null)
+        {
+            mUri = arguments.getParcelable(DETAIL_URI);
+        }
+
         return(rootView);
     }
 
@@ -78,22 +90,15 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args)
-    {
-        Log.v(LOG_TAG,"In onCreateLoader");
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.v(LOG_TAG, "In onCreateLoader");
 
-        Intent intent = getActivity().getIntent();
-
-        if(intent == null)
+        if (mUri != null)
         {
-            return null;
+            return new CursorLoader(getActivity(), mUri, FORECAST_COLUMNS, null, null, null);
         }
 
-        // Now create and return a CursorLoader that will take care of
-        // Creating a Cursor for the data being displayed.
-        Log.e(LOG_TAG, intent.getData().toString());
-
-        return new CursorLoader(getActivity(),intent.getData(),FORECAST_COLUMNS,null,null,null);
+        return null;
     }
 
     @Override
@@ -206,6 +211,18 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    void onLocationChanged(String newLocation)
+    {
+        Uri uri = mUri;
+        if(null != uri)
+        {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updatedUri;
+            getLoaderManager().restartLoader(DETAIL_LOADER,null,this);
+        }
     }
 
  }

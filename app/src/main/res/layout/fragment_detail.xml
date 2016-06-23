@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/column_max_temp_textView"
             android:layout_weight="1"
-            android:textSize="26sp"
+            android:textSize="30sp"
             android:layout_gravity="center_horizontal" />
 
         <TextView
@@ -58,15 +58,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/humidity_heading"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
-                android:id="@+id/humidity_textView"
-                android:text="84%" />
+                android:id="@+id/humidity_textView" />
         </LinearLayout>
 
         <LinearLayout
@@ -87,8 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
-                android:id="@+id/wind_textView"
-                android:text="6 km/H NW" />
+                android:id="@+id/wind_textView" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
-                android:text="1014 hPa"
                 android:id="@+id/pressure_textView" />
 
         </LinearLayout>

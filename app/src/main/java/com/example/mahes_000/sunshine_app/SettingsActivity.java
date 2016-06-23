@@ -1,5 +1,8 @@
 package com.example.mahes_000.sunshine_app;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -73,5 +76,16 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
 
         return true;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public Intent getParentActivityIntent()
+    {
+        // This flag will give the reference to already existing ParentActivity,
+        // If not then it will allow us to create a New Instance.
+
+        // Remember this is added in API 16 => Jelly Bean.
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 }

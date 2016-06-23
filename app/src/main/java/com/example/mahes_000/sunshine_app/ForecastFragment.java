@@ -68,6 +68,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
 
+    public interface Callback
+    {
+        void onItemSelected(Uri dateUri);
+    }
+
     public ForecastFragment()
     {
 
@@ -152,11 +157,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                if (cursor != null) {
+                if (cursor != null)
+                {
                     String locationSetting = Utility.getPreferredLocation(getActivity());
-                    Intent toDetailActivity = new Intent(getActivity(), DetailActivity.class).setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
-                    startActivity(toDetailActivity);
+
+                    // This is used for normal screens whose smallest width is lesser than 600dp
+                    ((Callback) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting,cursor.getLong(COL_WEATHER_DATE)));
                 }
+
             }
         });
 
@@ -191,9 +199,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             onLocationChanged();
             new MainActivity().mLocation = location;
         }
+//        DetailActivity detailFragment = (DetailActivity) getSupportFragmentManager().find
     }
 
-    private void onLocationChanged()
+    protected void onLocationChanged()
     {
         updateWeather(); // Updating the Weather
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
@@ -215,4 +224,35 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             startActivity(intent);
         }
     }
+
+/*    public interface Callback {
+        *//**
+         * DetailFragmentCallback for when an item has been selected.
+         *//*
+        public void onItemSelected(Uri dateUri);
+    }*/
+
+/*@Override
+public void onItemSelected(Uri dateUri)
+{
+    if(new MainActivity().mTwoPane)
+    {
+        Bundle args = new Bundle();
+        args.putParcelable(DetailActivityFragment.DETAIL_URI, dateUri);
+
+        DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
+        detailActivityFragment.setArguments(args);
+
+        // Here we are replacing the existing fragment in the MainActivity with a new fragment
+        getFragmentManager().beginTransaction().replace(R.id.weather_detail_container, detailActivityFragment, new MainActivity().DETAILFRAGMENT_TAG).commit();
+    }
+
+    // This works for screen sizes less than 600dp
+    else
+    {
+        Intent intent = new Intent(getActivity(), DetailActivity.class).setData(dateUri);
+        startActivity(intent);
+    }
+}*/
+
 }
