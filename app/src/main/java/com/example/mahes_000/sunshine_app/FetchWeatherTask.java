@@ -270,7 +270,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void>
 
         String format = "json";
         String units = "metric";
-        String API_Key = "486563a380c9eb938fdb890668697f20";
+        String API_Key = "1234567890";
         String numDays = "14";
 
         try {
