@@ -58,7 +58,7 @@ public class SunshineService extends IntentService
 
         String format = "json";
         String units = "metric";
-        String API_Key = "1234567890";
+        String API_Key = "1234567890234567890";
         String numDays = "14";
 
         try {
