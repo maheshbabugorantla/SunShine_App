@@ -13,7 +13,7 @@
 
     <!-- Here the ForecastFragment will be on the left and FrameLayout on the Right -->
     <fragment
-        android:id="@+id/fragment_forecast"
+        android:id="@+id/fragment"
         android:name="com.example.mahes_000.sunshine_app.ForecastFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"

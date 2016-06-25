@@ -24,6 +24,7 @@ public class ForecastAdapter extends CursorAdapter
 
     private final int VIEW_TYPE_TODAY = 0;
     private final int VIEW_TYPE_FUTURE_DAY = 1;
+    private boolean setTodayView = true;
 
     public ForecastAdapter(Context context, Cursor c, int flags)
     {
@@ -59,10 +60,15 @@ public class ForecastAdapter extends CursorAdapter
         return view;
     }
 
+    public void setTodayViewType(boolean todayView)
+    {
+        setTodayView = todayView;
+    }
+
     @Override
     public int getItemViewType(int position)
     {
-        return (position == 0) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+        return (position == 0 && setTodayView) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
     }
 
     // Here we are returning two because we are using two different view types (One for Today and other type for future days).
@@ -125,29 +131,6 @@ public class ForecastAdapter extends CursorAdapter
 //            viewHolder.iconView.setImageResource(Utility.getArtResourceforWeatherCondition(ForecastFragment.COL_WEATHER_CONDITION_ID));
         }
 
-/*
-        //ic_action_name is for clear Sky.
-        if(weather_desc.equals("Clear"))
-        {
-            viewHolder.iconView.setImageResource(R.drawable.clear_sky);
-        }
-
-        else if(weather_desc.equals("Rain"))
-        {
-            viewHolder.iconView.setImageResource(R.drawable.rain);
-        }
-
-        else if(weather_desc.equals("Clouds"))
-        {
-            viewHolder.iconView.setImageResource(R.drawable.cloudy);
-        }
-
-        else
-        {
-            viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
-        }
-*/
-
         // Setting the Temperature
         boolean isMetric = Utility.isMetric(context);
 
@@ -178,6 +161,5 @@ public class ForecastAdapter extends CursorAdapter
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
         }
-
     }
 }

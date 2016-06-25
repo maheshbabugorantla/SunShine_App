@@ -31,8 +31,10 @@ import com.example.mahes_000.sunshine_app.data.WeatherContract;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
     private ForecastAdapter mForecastAdapter;
-
+    private ListView mListView;
+    private static final String SELECTED_KEY = "selected_position";
     private static final int FORECAST_LOADER = 0; // Loader ID
+    private boolean mUseTodayView = false;
 
     //private String FORECASTFRAGMENT_TAG = "FFTAG";
 
@@ -54,7 +56,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
             WeatherContract.LocationEntry.COLUMN_COORD_LAT,
             WeatherContract.LocationEntry.COLUMN_COORD_LONG,
-    };
+        };
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
@@ -103,6 +105,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data)
     {
         mForecastAdapter.swapCursor(data);
+
+        int mPosition = new MainActivity().getItemPosition();
+
+        if(mPosition != ListView.INVALID_POSITION)
+        {
+            mListView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override
@@ -143,16 +152,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState)
     {
         mForecastAdapter = new ForecastAdapter(getActivity(),null,0);
+        mForecastAdapter.setTodayViewType(mUseTodayView);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        final ListView listView = (ListView) rootView.findViewById(R.id.listview_forcast);
-        listView.setAdapter(mForecastAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView = (ListView) rootView.findViewById(R.id.listview_forcast);
+        mListView.setAdapter(mForecastAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
@@ -165,9 +175,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     ((Callback) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting,cursor.getLong(COL_WEATHER_DATE)));
                 }
 
+                new MainActivity().setItemPosition(position);
             }
         });
 
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY))
+        {
+            new MainActivity().setItemPosition(savedInstanceState.getInt(SELECTED_KEY));
+            Log.d("Inside onCreateView: ", "Position restored to " + Integer.toString(new MainActivity().getItemPosition()));
+        }
+
+        Log.d("Inside onCreateView: ", "Position restored to " + Integer.toString(new MainActivity().getItemPosition()));
         return rootView;
     }
 
@@ -193,13 +212,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         String location = Utility.getPreferredLocation(getActivity()); // New Location.
 
-        if(location != null && !location.equals(new MainActivity().mLocation))
+        if(location != null && !location.equals(new MainActivity().getItemPosition()))
         {
            // ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
             onLocationChanged();
-            new MainActivity().mLocation = location;
+            new MainActivity().setItemPosition(Integer.parseInt(location));
         }
-//        DetailActivity detailFragment = (DetailActivity) getSupportFragmentManager().find
     }
 
     protected void onLocationChanged()
@@ -225,34 +243,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         }
     }
 
-/*    public interface Callback {
-        *//**
-         * DetailFragmentCallback for when an item has been selected.
-         *//*
-        public void onItemSelected(Uri dateUri);
-    }*/
-
-/*@Override
-public void onItemSelected(Uri dateUri)
-{
-    if(new MainActivity().mTwoPane)
+    public void setTodayView(boolean todayView)
     {
-        Bundle args = new Bundle();
-        args.putParcelable(DetailActivityFragment.DETAIL_URI, dateUri);
+        mUseTodayView = todayView;
 
-        DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
-        detailActivityFragment.setArguments(args);
+        // The reason we are check for the null is because this a public method and in Future it might be called before onCreateView.
+        if(mForecastAdapter != null)
+        {
+            mForecastAdapter.setTodayViewType(mUseTodayView);
+        }
 
-        // Here we are replacing the existing fragment in the MainActivity with a new fragment
-        getFragmentManager().beginTransaction().replace(R.id.weather_detail_container, detailActivityFragment, new MainActivity().DETAILFRAGMENT_TAG).commit();
+        return;
     }
-
-    // This works for screen sizes less than 600dp
-    else
-    {
-        Intent intent = new Intent(getActivity(), DetailActivity.class).setData(dateUri);
-        startActivity(intent);
-    }
-}*/
 
 }
