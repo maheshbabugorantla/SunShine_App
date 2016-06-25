@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mahes_000.sunshine_app.data.WeatherContract;
+import com.example.mahes_000.sunshine_app.service.SunshineService;
 
 
 /**
@@ -200,9 +201,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     public void updateWeather()
     {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-        String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+        Intent intent_service = new Intent(getActivity(), SunshineService.class);
+        intent_service.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
+        getActivity().startService(intent_service);
+
+        Log.d("Inside Update Weather", "Weather Updation Completed");
     }
 
     @Override

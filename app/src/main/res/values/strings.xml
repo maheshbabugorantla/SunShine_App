@@ -16,8 +16,8 @@
     <string name="action_share_weather" translatable="false">Share</string>
 
     <!-- Names of Activities -->
-    <string name="title_activity_detail">DetailActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_detail">Details</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- App Preferences -->
 

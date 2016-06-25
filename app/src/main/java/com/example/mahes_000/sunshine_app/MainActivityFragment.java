@@ -233,7 +233,7 @@ public class MainActivityFragment extends Fragment
             final String UNITS_PARAMETER = "units";
             final String DAYS_PARAM = "cnt";
             final String ID = "APPID";
-            final String API_Key = "1234567890";
+            final String API_Key = "486563a380c9eb938fdb890668697f20";
             String format = "json";
             String days = "7";
             String units = "metric";
