@@ -4,6 +4,8 @@ package com.example.mahes_000.sunshine_app;
  * Created by mahes_000 on 6/11/2016.
  */
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,7 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mahes_000.sunshine_app.data.WeatherContract;
-import com.example.mahes_000.sunshine_app.service.SunshineService;
+import com.example.mahes_000.sunshine_app.sync.SunshineSyncAdapter;
 
 
 /**
@@ -36,6 +38,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String SELECTED_KEY = "selected_position";
     private static final int FORECAST_LOADER = 0; // Loader ID
     private boolean mUseTodayView = false;
+
 
     //private String FORECASTFRAGMENT_TAG = "FFTAG";
 
@@ -201,11 +204,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     public void updateWeather()
     {
-        Intent intent_service = new Intent(getActivity(), SunshineService.class);
-        intent_service.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
-        getActivity().startService(intent_service);
-
-        Log.d("Inside Update Weather", "Weather Updation Completed");
+        SunshineSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
@@ -227,6 +226,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     {
         updateWeather(); // Updating the Weather
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void openPreferredMapLocation()

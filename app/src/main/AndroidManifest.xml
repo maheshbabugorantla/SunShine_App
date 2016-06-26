@@ -3,22 +3,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mahes_000.sunshine_app" >
 
+    <!-- Permission to use the Internet Resources from the User Device -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permission to find the network state -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Permission required by the Alarm Manager to start the service whenever the system reboots -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- Permissions required by the sync adapter -->
+    <uses-permission
+        android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <provider
-            android:authorities="com.example.mahesh_000.sunshine_app"
-            android:name=".data.WeatherProvider"
-            android:enabled="true"
-            android:exported="true"/>
-        
-        <service android:name=".service.SunshineService" />
 
         <activity
             android:name=".MainActivity"
@@ -53,6 +60,48 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".data.WeatherProvider"
+            android:exported="false"
+            android:syncable="true"/>
+
+<!--
+        &lt;!&ndash; This is to register the SunShine Service &ndash;&gt;
+        <service android:name=".service.SunshineService" />
+
+        &lt;!&ndash; Registering an Alarm Receiver &ndash;&gt;
+        <receiver android:name=".service.SunshineService$AlarmReceiver"
+            android:enabled="true"  />
+-->
+
+        <!-- SyncAdapter's dummy authentication service -->
+        <service android:name=".sync.SunshineAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- SyncAdapter Service -->
+        <service android:name=".sync.SunshineSyncService"
+                 android:exported="true"
+                 >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+
     </application>
 </manifest>
 

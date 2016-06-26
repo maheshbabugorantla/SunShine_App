@@ -50,4 +50,8 @@
     <string name="pressure_heading">PRESSURE: </string>
     <string name="wind_heading">WIND: </string>
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">sunshine.example.com</string>
+    <string name="content_authority">com.example.mahesh_000.sunshine_app</string>
+
 </resources>
